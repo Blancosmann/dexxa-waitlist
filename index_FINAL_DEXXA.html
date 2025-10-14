@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Co-pilota AI per lo sviluppo commerciale – Accesso Anticipato | Q1 2026</title>
+<meta property="og:title" content="Co-pilota AI per lo sviluppo commerciale – Accesso Anticipato | Q1 2026">
+<meta name="twitter:title" content="Co-pilota AI per lo sviluppo commerciale – Accesso Anticipato | Q1 2026">
+<meta name="description" content="Iscriviti alla waitlist per l'accesso anticipato al co‑pilota AI per lo sviluppo commerciale di dexxa.">
+<meta property="og:description" content="Iscriviti alla waitlist per l'accesso anticipato al co‑pilota AI per lo sviluppo commerciale di dexxa.">
+<meta name="theme-color" content="#0a0a0a">
+<style>
+  :root { --bg:#0a0a0a; --card:#121826; --muted:#9aa4b2; --accent:#2196F3; --ok:#22c55e; --err:#ef4444; }
+  *{box-sizing:border-box}
+  body{font-family:Inter,system-ui,Arial,sans-serif;background:var(--bg);color:#fff;margin:0;padding:48px}
+  .wrap{max-width:760px;margin:0 auto}
+  .card{background:linear-gradient(180deg,#0f172a, #0b1222); border:1px solid #1f2937; border-radius:16px; padding:24px; box-shadow:0 10px 30px rgba(0,0,0,.35)}
+  h1{font-weight:700;font-size:28px;margin:0 0 6px}
+  p.lead{color:var(--muted);margin:0 0 18px}
+  form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  form .full{grid-column:1/-1}
+  input,select{width:100%;padding:12px 14px;border-radius:10px;border:1px solid #253042;background:#0b1324;color:#e5e7eb;outline:none}
+  input::placeholder{color:#73839b}
+  label.chk{display:flex;gap:8px;align-items:flex-start;color:#cbd5e1;font-size:14px}
+  button{padding:12px 16px;border-radius:10px;border:none;background:var(--accent);color:white;font-weight:600;cursor:pointer}
+  button:disabled{opacity:.65;cursor:not-allowed}
+  .msg{display:none;padding:10px 12px;border-radius:10px;margin-top:12px;font-weight:600}
+  .msg.ok{background:rgba(34,197,94,.15);color:#bbf7d0;border:1px solid rgba(34,197,94,.4)}
+  .msg.err{background:rgba(239,68,68,.15);color:#fecaca;border:1px solid rgba(239,68,68,.4)}
+  .bar{height:16px;background:#182235;border-radius:12px;overflow:hidden;margin-top:18px;border:1px solid #1f2a3c}
+  .bar>div{height:100%;width:0%;background:var(--accent);transition:width .3s ease}
+  .meta{color:#9aa4b2;font-size:14px;margin-top:10px}
+  .footer{color:#6b7280;text-align:center;margin-top:18px;font-size:12px}
+  @media (max-width:640px){ form{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <h1>dexxa — Co‑pilota AI per lo sviluppo commerciale</h1>
+    <p class="lead">Iscriviti alla waitlist per l’Accesso Anticipato (Q1 2026)</p>
+
+    <form id="waitlistForm" novalidate>
+      <input id="name" class="full" placeholder="Nome e cognome *" required>
+      <input id="email" class="full" placeholder="Email aziendale *" required>
+      <input id="company" placeholder="Azienda">
+      <input id="role" placeholder="Ruolo">
+      <select id="province" required>
+        <option value="">Provincia *</option>
+        <option>Milano</option><option>Bergamo</option><option>Brescia</option>
+        <option>Torino</option><option>Roma</option><option>Napoli</option>
+      </select>
+      <select id="leads" required>
+        <option value="">Nuovi clienti a settimana *</option>
+        <option>0-2</option><option>3-5</option><option>6+</option>
+      </select>
+      <label class="chk full">
+        <input type="checkbox" id="privacy" required>
+        <span>Accetto la Privacy Policy e acconsento a ricevere aggiornamenti sul lancio *</span>
+      </label>
+      <button id="submitButton" class="full" type="submit">ISCRIVITI ALLA WAITLIST</button>
+    </form>
+
+    <div id="successMessage" class="msg ok">Sei nella lista! Ti avviseremo via email.</div>
+    <div id="errorMessage" class="msg err">Errore di rete. Riprova più tardi.</div>
+
+    <div class="bar" aria-label="Progresso iscrizioni">
+      <div id="progressBar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+    </div>
+    <div class="meta"><span id="spotsRemaining">100</span> posti rimanenti</div>
+  </div>
+
+  <div class="footer">© 2025 dexxa — Il primo co‑pilota per lo sviluppo commerciale</div>
+</div>
+
+<script>
+// === CONFIG ===
+const GAS_ENDPOINT = 'https://script.google.com/macros/s/AKfycbyO6vHJh7IN-DaCH6Mnm5Ih54_5UJNtSYS4wC0wplBdTWQL6aOT86RBXnsXQyL0wC7Daw/exec';
+const CAPACITY = 100;
+
+// Helpers
+const qs = (s)=>document.querySelector(s);
+const fade = (el, on=true)=>{ el.style.display='block'; el.style.opacity=on?1:0; if(!on) setTimeout(()=>el.style.display='none',300); };
+
+let subscriptions = 0;
+function renderProgress(){
+  const left = Math.max(0, CAPACITY - subscriptions);
+  const pct = Math.min(100, Math.round((subscriptions/CAPACITY)*100));
+  const leftEl = qs('#spotsRemaining'); if (leftEl) leftEl.textContent = String(left);
+  const bar = qs('#progressBar'); if (bar){ bar.style.width = pct + '%'; bar.setAttribute('aria-valuenow', pct); }
+}
+
+async function syncCountFromServer(){
+  try{
+    const res = await fetch(GAS_ENDPOINT + '?t=' + Date.now(), { method:'GET', mode:'cors' });
+    if(!res.ok) throw new Error('http ' + res.status);
+    const json = await res.json();
+    if(json && json.ok === true && Number.isFinite(json.total)){
+      subscriptions = json.total;
+      renderProgress();
+    }
+  }catch(e){ console.warn('syncCountFromServer:', e); }
+}
+
+function showSuccess(msg='Sei nella lista! Ti avviseremo via email.'){
+  const el = qs('#successMessage'); if(!el) return alert(msg);
+  el.textContent = msg; fade(el,true); setTimeout(()=>fade(el,false),5000);
+  el.scrollIntoView({behavior:'smooth', block:'center'});
+}
+function showError(msg='Errore di rete. Riprova più tardi.'){
+  const el = qs('#errorMessage'); if(!el) return alert(msg);
+  el.textContent = msg; fade(el,true); setTimeout(()=>fade(el,false),6000);
+}
+
+function validateBusinessEmail(email){
+  const free = /(gmail|yahoo|hotmail|outlook|live|icloud|aol|proton|gmx)\./i;
+  return !free.test(email);
+}
+
+async function handleSubmit(e){
+  e.preventDefault();
+  const form = e.target;
+  const btn = qs('#submitButton');
+  const email = qs('#email').value.trim();
+
+  if(!validateBusinessEmail(email)){
+    showError('Usa una email aziendale (no domini “free”).');
+    return;
+  }
+
+  btn.disabled = true;
+  const prev = btn.textContent;
+  btn.textContent = 'REGISTRAZIONE IN CORSO...';
+
+  const data = {
+    name: qs('#name').value.trim(),
+    email,
+    company: qs('#company').value.trim(),
+    role: qs('#role').value.trim(),
+    province: qs('#province').value,
+    leads: qs('#leads').value,
+    privacy: qs('#privacy').checked,
+    userAgent: navigator.userAgent,
+    referrer: document.referrer || ''
+  };
+
+  try{
+    const res = await fetch(GAS_ENDPOINT, {
+      method:'POST',
+      mode:'cors',
+      headers:{ 'Content-Type':'text/plain;charset=utf-8' },
+      body: JSON.stringify(data)
+    });
+    if(!res.ok) throw new Error('http ' + res.status);
+    const json = await res.json();
+    if(!json || json.ok !== true) throw new Error('bad json');
+
+    // UI immediate
+    subscriptions = Math.min(CAPACITY, subscriptions + 1);
+    renderProgress();
+    showSuccess();
+
+    form.reset();
+  }catch(err){
+    console.error(err);
+    showError('Errore di rete. Controlla la connessione o riprova tra poco.');
+  }finally{
+    btn.disabled = false;
+    btn.textContent = prev;
+  }
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  renderProgress();
+  syncCountFromServer();
+  setInterval(syncCountFromServer, 60000);
+  const f = qs('#waitlistForm'); if (f) f.addEventListener('submit', handleSubmit);
+});
+</script>
+</body>
+</html>
