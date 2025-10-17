@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Co-pilota AI per lo sviluppo commerciale – Accesso Anticipato | Q1 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg-grad-start:#0a0a0a; --bg-grad-mid:#1a1a2e; --bg-grad-end:#16213e;
+      --color-success:#4CAF50; --color-primary:#2196F3; --color-warning:#FF9800; --color-danger:#FF4444;
+      --text-primary:#fff; --text-secondary:#ccc; --text-muted:#999;
+      --surface-03:rgba(255,255,255,.03); --surface-05:rgba(255,255,255,.05);
+      --border-08:rgba(255,255,255,.08); --border-12:rgba(255,255,255,.12);
+      --blur:15px; --radius-card:20px; --radius-btn:14px;
+    }
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      font-family:'Inter',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+      background:linear-gradient(135deg,var(--bg-grad-start) 0%,var(--bg-grad-mid) 50%,var(--bg-grad-end) 100%);
+      min-height:100vh;color:var(--text-primary);line-height:1.6;overflow-x:hidden
+    }
+    .container{max-width:1200px;margin:0 auto;padding:80px 40px}
+    .title-xl{font-size:72px;font-weight:300;letter-spacing:-.03em;line-height:1.1;margin-bottom:30px}
+    .subtitle{font-size:24px;color:var(--text-secondary);font-weight:300;margin-bottom:50px;max-width:760px;margin-left:auto;margin-right:auto}
+    .badge{display:inline-block;background:linear-gradient(135deg,var(--color-warning),var(--color-danger));color:#fff;padding:8px 24px;border-radius:30px;font-size:14px;font-weight:600;margin-bottom:40px;text-transform:uppercase;letter-spacing:1px;animation:pulse 3s infinite}
+    @keyframes pulse{0%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,152,0,.35)}70%{transform:scale(1.02);box-shadow:0 0 0 10px rgba(255,152,0,0)}100%{transform:scale(1);box-shadow:0 0 0 0 rgba(255,152,0,0)}}
+    .premium{font-family:'Playfair Display',serif;font-style:italic;font-weight:400}
+    a{color:inherit}
+    .hero{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:80px 40px 40px}
+    .hero-content{text-align:center;max-width:900px;width:100%}
+    .urgency-bar{background:var(--surface-05);border:1px solid var(--border-08);border-radius:30px;padding:15px 30px;margin-bottom:50px;backdrop-filter:blur(10px);display:inline-block}
+    .urgency-text{color:var(--color-warning);font-weight:500;font-size:14px}
+    .spots-left{color:var(--text-primary);font-weight:700;font-size:16px}
+    .progress-container{margin-bottom:12px;max-width:500px;margin-left:auto;margin-right:auto}
+    .progress-label{display:flex;justify-content:center;gap:8px;margin-bottom:10px;font-size:14px;color:var(--text-secondary)}
+    .progress-bar{height:8px;background:var(--surface-05);border-radius:10px;overflow:hidden}
+    .progress-fill{height:100%;background:linear-gradient(90deg,var(--color-primary),var(--color-success));width:0%;transition:width .3s ease;animation:shimmer 2s infinite}
+    @keyframes shimmer{0%{opacity:.85}50%{opacity:1}100%{opacity:.85}}
+    .oversub-note{display:none;text-align:center;font-size:12px;color:var(--text-muted);margin-top:8px}
+    .oversub-note.show{display:block}
+    .card{background:var(--surface-03);border:1px solid var(--border-08);border-radius:var(--radius-card);padding:50px;backdrop-filter:blur(var(--blur));box-shadow:0 20px 60px rgba(0,0,0,.3)}
+    .form-title{font-size:28px;font-weight:400;margin-bottom:15px;text-align:center}
+    .form-subtitle{font-size:16px;color:var(--text-secondary);margin-bottom:40px;text-align:center}
+    .form-group{margin-bottom:25px;text-align:left}
+    .form-label{display:block;font-size:14px;color:var(--text-secondary);margin-bottom:10px;font-weight:500}
+    .form-input,.form-select{width:100%;padding:15px 20px;background:#2a2a2a;border:1px solid #444;color:#fff;border-radius:12px;font-size:16px;transition:all .3s}
+    .form-input:focus,.form-select:focus{outline:none;border-color:var(--color-success);box-shadow:0 0 0 3px rgba(76,175,80,.25)}
+    .form-checkbox-group{display:flex;align-items:flex-start;gap:12px;margin-bottom:30px}
+    .btn{padding:18px 40px;background:linear-gradient(180deg,rgba(76,175,80,.35),rgba(76,175,80,.10));border:1px solid rgba(76,175,80,.55);color:#fff;border-radius:var(--radius-btn);font-size:16px;font-weight:600;cursor:pointer;transition:all .3s;text-transform:uppercase;letter-spacing:1px;width:100%}
+    .btn:hover{transform:translateY(-3px);box-shadow:0 15px 40px rgba(76,175,80,.35)}
+    .btn:disabled{opacity:.5;cursor:not-allowed}
+    .spinner{display:none;width:20px;height:20px;border:3px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;margin:10px auto 0}
+    .spinner.show{display:block}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .success-message{display:none;background:linear-gradient(135deg,rgba(76,175,80,.2),rgba(76,175,80,.1));border:1px solid var(--color-success);border-radius:var(--radius-card);padding:30px;text-align:center;margin-bottom:30px}
+    .success-message.show{display:block;animation:fadeIn .5s ease}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+    .teaser-section{padding:80px 40px;max-width:1200px;margin:0 auto}
+    .section-title{font-size:42px;font-weight:300;text-align:center;margin-bottom:60px;letter-spacing:-.02em}
+    .teaser-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:40px}
+    .teaser-card{text-align:center;opacity:0;transform:translateY(20px);animation:fadeInUp .8s ease forwards}
+    .teaser-card:nth-child(1){animation-delay:.1s}.teaser-card:nth-child(2){animation-delay:.2s}.teaser-card:nth-child(3){animation-delay:.3s}.teaser-card:nth-child(4){animation-delay:.4s}.teaser-card:nth-child(5){animation-delay:.5s}.teaser-card:nth-child(6){animation-delay:.6s}
+    @keyframes fadeInUp{to{opacity:1;transform:translateY(0)}}
+    .teaser-icon{font-size:48px;margin-bottom:20px}
+    .teaser-title{font-size:20px;font-weight:500;margin-bottom:15px}
+    .teaser-description{font-size:14px;color:var(--text-secondary);line-height:1.8}
+    .teaser-soon{display:inline-block;background:var(--surface-05);border:1px solid var(--border-08);padding:4px 12px;border-radius:20px;font-size:11px;color:var(--color-primary);margin-top:10px;text-transform:uppercase}
+    .faq{padding:80px 40px;max-width:800px;margin:0 auto}
+    .faq-item{background:var(--surface-03);border:1px solid var(--border-08);border-radius:var(--radius-card);padding:30px;backdrop-filter:blur(var(--blur));margin-bottom:20px;cursor:pointer;transition:all .3s}
+    .faq-item:hover{border-color:var(--border-12)}
+    .faq-question{font-size:18px;font-weight:500;display:flex;justify-content:space-between;align-items:center}
+    .faq-icon{font-size:24px;transition:transform .3s}
+    .faq-item.active .faq-icon{transform:rotate(45deg)}
+    .faq-answer{display:none;margin-top:20px;padding-top:20px;border-top:1px solid var(--border-08);color:var(--text-secondary);line-height:1.8}
+    .faq-item.active .faq-answer{display:block}
+    .footer{padding:60px 40px;text-align:center}
+    .footer-content{max-width:800px;margin:0 auto}
+    .social-links{display:flex;justify-content:center;gap:30px;margin-bottom:30px}
+    .social-link{color:var(--text-secondary);text-decoration:none;font-size:14px;transition:color .3s}
+    .social-link:hover{color:var(--text-primary)}
+    .footer-text{color:var(--text-muted);font-size:14px}
+    /* Policy */
+    .policy-wrap{max-width:900px;margin:0 auto}
+    .policy-header{margin-bottom:32px;text-align:center}
+    .policy-title{font-size:42px;font-weight:300;letter-spacing:-.02em;margin-bottom:8px}
+    .policy-meta{font-size:14px;color:var(--text-secondary)}
+    .policy-card{background:var(--surface-03);border:1px solid var(--border-08);border-radius:20px;padding:32px;backdrop-filter:blur(15px)}
+    .policy-card h2,.policy-card h3{font-size:18px;margin:28px 0 10px}
+    .policy-card p,.policy-card li{color:var(--text-secondary);font-size:15px;line-height:1.8;margin:0 0 16px}
+    .policy-actions{margin-top:24px;text-align:center}
+    .link-btn{display:inline-block;margin:0 8px;padding:10px 18px;border:1px solid var(--border-08);border-radius:12px;background:var(--surface-05);text-decoration:none;font-size:14px}
+    main[hidden]{display:none !important}
+    @media (max-width:768px){
+      .title-xl{font-size:42px}
+      .subtitle{font-size:18px}
+      .card{padding:30px 20px}
+    }
+  </style>
+</head>
+<body>
+<main id="route-home" aria-labelledby="home-title">
+  <section class="hero">
+    <div class="hero-content">
+      <div class="badge">🎯 ACCESSO ESCLUSIVO DAL 2 FEBBRAIO</div>
+      <h1 id="home-title" class="title-xl">Trovare <span class="premium">nuovi clienti</span> non è mai stato così facile</h1>
+      <p class="subtitle">Il primo co-pilota per lo sviluppo commerciale dedicato ai consulenti finanziari</p>
+      <div class="urgency-bar">
+        <span class="urgency-text">⚡ </span><span class="spots-left" id="spotsLeft">100</span><span class="urgency-text"> posti rimanenti su 100</span>
+      </div>
+      <div class="progress-container">
+        <div class="progress-label" id="progressLabel">Posti disponibili: 100 • Iscrizioni: <span id="subsCount">0</span></div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <div id="oversubNote" class="oversub-note">Sovrascritta – i posti verranno assegnati in ordine di iscrizione e priorità di provincia.</div>
+      </div>
+      <div class="card" style="max-width:600px;margin:0 auto 60px">
+        <h2 class="form-title">Accedi prima degli altri<br>Iscriviti Ora!</h2>
+        <p class="form-subtitle">Ricevi l'accesso prioritario prima del lancio ufficiale</p>
+        <div class="success-message" id="successMessage">
+          <div style="font-size:48px;margin-bottom:20px">🎉</div>
+          <h3 style="font-size:24px;margin-bottom:10px">Sei nella lista!</h3>
+          <p style="color:var(--text-secondary)">Ti contatteremo appena saremo pronti per il lancio. Controlla la tua email per la conferma.</p>
+        </div>
+        <form id="waitlistForm">
+          <div class="form-group"><label class="form-label" for="name">Nome e Cognome *</label><input class="form-input" type="text" id="name" name="name" placeholder="Mario Rossi" required></div>
+          <div class="form-group"><label class="form-label" for="email">Email Professionale *</label><input class="form-input" type="email" id="email" name="email" placeholder="mario@azienda.com" required></div>
+          <div class="form-group"><label class="form-label" for="company">Azienda *</label><input class="form-input" type="text" id="company" name="company" placeholder="Nome Azienda" required></div>
+          <div class="form-group"><label class="form-label" for="role">Ruolo *</label>
+            <select class="form-select" id="role" name="role" required>
+              <option value="">Seleziona il tuo ruolo</option>
+              <option value="consulente">Consulente Finanziario</option>
+              <option value="private">Private Banker</option>
+              <option value="business">Business Manager</option>
+              <option value="group">Group Manager</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label" for="province">Provincia di tuo interesse *</label>
+            <select class="form-select" id="province" name="province" required>
+              <option value="">Seleziona una provincia</option>
+              <option value="bergamo">Bergamo</option><option value="brescia">Brescia</option>
+              <option value="como">Como</option><option value="cremona">Cremona</option>
+              <option value="lecco">Lecco</option><option value="lodi">Lodi</option>
+              <option value="mantova">Mantova</option><option value="milano">Milano</option>
+              <option value="monza">Monza e Brianza</option><option value="pavia">Pavia</option>
+              <option value="sondrio">Sondrio</option><option value="varese">Varese</option>
+            </select>
+          </div>
+          <div class="form-group"><label class="form-label" for="leads">Attualmente, quanti nuovi clienti contatti a settimana? *</label>
+            <select class="form-select" id="leads" name="leads" required>
+              <option value="">Seleziona una fascia</option>
+              <option value="0-2">0–2</option><option value="3-5">3–5</option><option value="6+">6+</option>
+            </select>
+          </div>
+          <div class="form-checkbox-group">
+            <input type="checkbox" id="privacy" name="privacy" class="form-checkbox" required>
+            <label for="privacy" class="form-label" style="margin:0">Accetto la Privacy Policy e acconsento a ricevere comunicazioni relative al lancio del prodotto *</label>
+          </div>
+          <button class="btn" id="submitBtn" type="submit">Blocca il tuo Accesso Prioritario</button>
+          <div class="spinner" id="spinner"></div>
+        </form>
+        <p style="text-align:center;margin-top:20px;color:var(--text-muted);font-size:12px">🔒 I tuoi dati sono al sicuro. Zero spam, solo aggiornamenti importanti.</p>
+      </div>
+    </div>
+  </section>
+  <section class="teaser-section">
+    <h2 class="section-title">Tutto quello che ti serve per fare <span class="premium">sviluppo</span></h2>
+    <div class="teaser-grid">
+      <div class="teaser-card"><div class="teaser-icon">🎯</div><h3 class="teaser-title">Contatti Pre-Qualificati</h3><p class="teaser-description">Accedi ogni settimana a contatti già verificati e in target con la tua area d'interesse.</p><span class="teaser-soon">Dettagli al lancio</span></div>
+      <div class="teaser-card"><div class="teaser-icon">✉️</div><h3 class="teaser-title">Email Verificate</h3><p class="teaser-description">Ti forniamo email professionali validate e pronte per l'attività di sviluppo.</p><span class="teaser-soon">Dettagli al lancio</span></div>
+      <div class="teaser-card"><div class="teaser-icon">🤖</div><h3 class="teaser-title">Co-Pilota AI</h3><p class="teaser-description">Messaggi personalizzati e pronti all'invio, generati su misura per ciascun contatto.</p><span class="teaser-soon">Dettagli al lancio</span></div>
+      <div class="teaser-card"><div class="teaser-icon">🔒</div><h3 class="teaser-title">Esclusività Territoriale</h3><p class="teaser-description">Ogni area ha posti limitati: i tuoi contatti non saranno mai condivisi con altri consulenti.</p><span class="teaser-soon">Dettagli al lancio</span></div>
+      <div class="teaser-card"><div class="teaser-icon">📈</div><h3 class="teaser-title">Gestione Pipeline Avanzata</h3><p class="teaser-description">Organizza le opportunità per priorità e stato, con promemoria intelligenti.</p><span class="teaser-soon">Dettagli al lancio</span></div>
+      <div class="teaser-card"><div class="teaser-icon">🛡️</div><h3 class="teaser-title">100% Conforme al GDPR</h3><p class="teaser-description">Raccolta e trattamento dati in conformità al Regolamento Europeo.</p><span class="teaser-soon">Dettagli al lancio</span></div>
+    </div>
+  </section>
+  <section class="faq">
+    <h2 class="section-title">Domande <span class="premium">Frequenti</span></h2>
+    <div class="faq-item"><div class="faq-question">Quando potrò iniziare a utilizzarlo? <span class="faq-icon">+</span></div><div class="faq-answer">Avrai accesso esclusivo dal 2 febbraio 2026, con priorità assoluta se ti iscrivi subito alla lista d'attesa.</div></div>
+    <div class="faq-item"><div class="faq-question">Quali vantaggi avrò iscrivendomi ora? <span class="faq-icon">+</span></div><div class="faq-answer">I posti sono limitati: iscrivendoti subito sarai tra i primi ad accedere alle aree di tuo interesse.</div></div>
+    <div class="faq-item"><div class="faq-question">Quanto costerà? <span class="faq-icon">+</span></div><div class="faq-answer">Riceverai i dettagli solo se sei iscritto alla lista d'attesa. Possiamo anticipare che l'investimento sarà minimo rispetto al costo di un collaboratore part-time che ti supporti in queste attività.</div></div>
+    <div class="faq-item"><div class="faq-question">Che tipo di contatti riceverò? <span class="faq-icon">+</span></div><div class="faq-answer">Riceverai nominativi di imprenditori già profilati, con dati verificati e in linea con le tue esigenze di sviluppo come consulente finanziario.</div></div>
+    <div class="faq-item"><div class="faq-question">Con quale frequenza riceverò i contatti? <span class="faq-icon">+</span></div><div class="faq-answer">Avrai un flusso costante e gestibile di nuove opportunità ogni settimana.</div></div>
+    <div class="faq-item"><div class="faq-question">Cosa significa esclusività territoriale? <span class="faq-icon">+</span></div><div class="faq-answer">La tua area geografica avrà posti limitati: i contatti che riceverai non saranno condivisi con nessun altro consulente.</div></div>
+    <div class="faq-item"><div class="faq-question">I dati che riceverò sono davvero utilizzabili? <span class="faq-icon">+</span></div><div class="faq-answer">Sì. Tutti i contatti provengono da fonti pubbliche e ufficiali, raccolti e trattati nel pieno rispetto del Regolamento Europeo. Potrai quindi utilizzarli in totale tranquillità per la tua attività di sviluppo commerciale.</div></div>
+    <div class="faq-item"><div class="faq-question">Ho visto che i posti sono esauriti, conviene iscriversi comunque? <span class="faq-icon">+</span></div><div class="faq-answer">Assolutamente sì! I 100 posti iniziali sono per l'accesso anticipato, ma ogni provincia avrà il suo pacchetto di posti dedicati. Iscrivendoti ora, anche se vedi la lista piena, garantisci la tua priorità per la provincia che hai selezionato. Le assegnazioni vengono fatte per area geografica e potresti comunque ottenere l'accesso nella tua zona di interesse.</div></div>
+  </section>
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="social-links">
+        <a href="mailto:info@dexxa.ai" class="social-link">Email</a>
+        <a href="#privacy" class="social-link">Privacy</a>
+        <a href="#termini" class="social-link">Termini</a>
+      </div>
+      <p class="footer-text">© 2025 dexxa - Il primo Co-pilota per lo Sviluppo Commerciale. Tutti i diritti riservati.</p>
+<p class="footer-text">La piattaforma di intelligenza artificiale che rivoluziona la ricerca clienti dei consulenti finanziari, con contatti qualificati, esclusività territoriale e automazione completa</p>
+    </div>
+  </footer>
+</main>
+
+<main id="route-privacy" hidden aria-labelledby="privacy-title">
+  <div class="container policy-wrap">
+    <header class="policy-header">
+      <h1 id="privacy-title" class="policy-title">Privacy Policy</h1>
+      <p class="policy-meta">Ultimo aggiornamento: ottobre 2025</p>
+    </header>
+    <article class="policy-card">
+      
+
+<p>1. Titolare del trattamento</p>
+<p>Il Titolare del trattamento dei dati personali è dexxa, marchio commerciale operante nel settore delle tecnologie per lo sviluppo commerciale dei consulenti finanziari.
+Per qualsiasi richiesta relativa alla protezione dei dati personali è possibile scrivere a:
+📧 privacy@dexxa.ai</p>
+<p>2. Tipologie di dati raccolti</p>
+<p>dexxa raccoglie e tratta i seguenti dati personali:</p>
+<p>Dati forniti volontariamente dall’utente: nome, cognome, indirizzo email, società, ruolo professionale, provincia, e ogni altro dato inserito nei form di contatto o nella waiting list.</p>
+<p>Dati di navigazione: informazioni tecniche sul dispositivo, indirizzo IP, tipo di browser, tempi di accesso, pagine visitate.</p>
+<p>Cookie e strumenti analoghi: cookie tecnici necessari al funzionamento del sito, e cookie analitici (es. Google Analytics) per fini statistici anonimi.</p>
+<p>dexxa non richiede né tratta dati appartenenti a categorie particolari (es. salute, opinioni politiche, religione, ecc.).</p>
+<p>3. Finalità del trattamento</p>
+<p>I dati personali sono trattati per le seguenti finalità:</p>
+<p>Gestione della waiting list e comunicazioni pre-lancio – per informare gli utenti sull’avvio della piattaforma dexxa e sulle sue funzionalità.</p>
+<p>Iscrizione alla newsletter – per inviare aggiornamenti, approfondimenti, consigli e materiali utili sull’utilizzo della piattaforma.</p>
+<p>Gestione delle richieste di contatto – per rispondere a domande o richieste di supporto.</p>
+<p>Analisi statistiche e miglioramento del servizio – per comprendere come gli utenti interagiscono con il sito e ottimizzare l’esperienza d’uso.</p>
+<p>Adempimenti legali e sicurezza informatica – per garantire la conformità alle normative vigenti e la protezione dei sistemi informatici.</p>
+<p>4. Base giuridica del trattamento</p>
+<p>I dati personali sono trattati in base a:</p>
+<p>Consenso dell’interessato (art. 6, par. 1, lett. a) GDPR), espresso mediante i form di iscrizione alla waiting list o alla newsletter.</p>
+<p>Esecuzione di misure precontrattuali o contrattuali (art. 6, par. 1, lett. b) GDPR), in caso di contatti o accesso ai servizi della piattaforma.</p>
+<p>Legittimo interesse del titolare (art. 6, par. 1, lett. f) GDPR), per la sicurezza, il miglioramento del servizio e la prevenzione di abusi.</p>
+<p>5. Modalità del trattamento</p>
+<p>Il trattamento dei dati avviene mediante strumenti elettronici e informatici, con logiche strettamente correlate alle finalità indicate e adottando misure tecniche e organizzative adeguate per garantire la sicurezza e la riservatezza dei dati.
+I dati sono conservati su server situati nell’Unione Europea o in paesi che garantiscono un adeguato livello di protezione ai sensi del GDPR.</p>
+<p>6. Conservazione dei dati</p>
+<p>I dati raccolti tramite la waiting list e la newsletter vengono conservati fino alla revoca del consenso o alla richiesta di cancellazione.</p>
+<p>I log tecnici e i dati di navigazione vengono conservati per un periodo massimo di 12 mesi, salvo obblighi di legge o esigenze di sicurezza.</p>
+<p>7. Comunicazione e trasferimento dei dati</p>
+<p>I dati personali non sono ceduti né venduti a terzi.
+Possono tuttavia essere comunicati a soggetti che forniscono servizi tecnici o gestionali a dexxa (es. hosting provider, servizi di email marketing, strumenti di analytics), nominati Responsabili del trattamento ai sensi dell’art. 28 GDPR.
+Qualora i dati fossero trasferiti verso paesi extra-UE, dexxa assicura che il trasferimento avvenga in conformità agli artt. 44-49 del GDPR, mediante Clausole Contrattuali Standard o altre garanzie adeguate.</p>
+<p>8. Diritti dell’interessato</p>
+<p>Gli utenti hanno il diritto di:</p>
+<p>ottenere conferma dell’esistenza o meno dei propri dati personali e accedervi (art. 15 GDPR);</p>
+<p>chiederne la rettifica (art. 16) o la cancellazione (art. 17);</p>
+<p>limitare o opporsi al trattamento (art. 18-21);</p>
+<p>revocare il consenso in qualsiasi momento (art. 7, par. 3);</p>
+<p>proporre reclamo all’autorità di controllo competente (in Italia: Garante per la protezione dei dati personali – www.garanteprivacy.it).</p>
+<p>Le richieste possono essere inviate a privacy@dexxa.ai.</p>
+<p>9. Cookie e strumenti di tracciamento</p>
+<p>dexxa utilizza:</p>
+<p>Cookie tecnici necessari per il corretto funzionamento del sito.</p>
+<p>Cookie analitici anonimizzati per fini statistici e di miglioramento del servizio.
+Non vengono utilizzati cookie di profilazione o strumenti per finalità pubblicitarie.
+Per ulteriori dettagli è disponibile la Cookie Policy separata.</p>
+<p>10. Minori di 18 anni</p>
+<p>dexxa non offre i propri servizi a minori di 18 anni e non raccoglie volontariamente i loro dati personali.
+Se un genitore o tutore ritiene che un minore abbia fornito dati, può contattare privacy@dexxa.ai per richiederne la cancellazione immediata.</p>
+<p>11. Aggiornamenti della Privacy Policy</p>
+<p>dexxa si riserva il diritto di aggiornare periodicamente la presente informativa per adeguarla a modifiche normative o evoluzioni del servizio.
+Le modifiche saranno pubblicate su questa pagina, con indicazione della data di aggiornamento.</p>
+      <div class="policy-actions">
+        <a class="link-btn" href="#home">← Torna alla Home</a>
+      </div>
+    </article>
+  </div>
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="social-links">
+        <a href="mailto:info@dexxa.ai" class="social-link">Email</a>
+        <a href="#privacy" class="social-link">Privacy</a>
+        <a href="#termini" class="social-link">Termini</a>
+      </div>
+      <p class="footer-text">© 2025 dexxa - Il primo Co-pilota per lo Sviluppo Commerciale. Tutti i diritti riservati.</p>
+<p class="footer-text">La piattaforma di intelligenza artificiale che rivoluziona la ricerca clienti dei consulenti finanziari, con contatti qualificati, esclusività territoriale e automazione completa</p>
+    </div>
+  </footer>
+</main>
+
+<main id="route-termini" hidden aria-labelledby="terms-title">
+  <div class="container policy-wrap">
+    <header class="policy-header">
+      <h1 id="terms-title" class="policy-title">Termini e Condizioni d’Uso</h1>
+      <p class="policy-meta">Ultimo aggiornamento: ottobre 2025</p>
+    </header>
+    <article class="policy-card">
+      
+<p>1. Introduzione</p>
+<p>Benvenuto su dexxa, una piattaforma digitale progettata per supportare i consulenti finanziari nello sviluppo commerciale attraverso strumenti di analisi, automazione e intelligenza artificiale. L’accesso e l’utilizzo della piattaforma implicano l’accettazione integrale dei presenti Termini e Condizioni d’Uso. Ti invitiamo a leggerli attentamente prima di utilizzare il servizio.</p>
+<p>2. Definizioni</p>
+<p>Piattaforma: indica il sito web, l’applicazione e ogni servizio digitale fornito da dexxa.</p>
+<p>Utente: chiunque acceda o utilizzi i servizi offerti da dexxa.</p>
+<p>Servizi: le funzionalità e i contenuti forniti da dexxa, incluse analisi, lead, strumenti di automazione e comunicazione.</p>
+<p>3. Accesso e utilizzo del servizio</p>
+<p>L’utilizzo di dexxa è riservato a utenti maggiori di 18 anni e con finalità professionali.
+L’utente si impegna a fornire informazioni veritiere al momento della registrazione e a non utilizzare la piattaforma in modo improprio, illecito o tale da comprometterne la sicurezza o l’integrità.</p>
+<p>dexxa può sospendere, limitare o interrompere l’accesso ai servizi in caso di utilizzo non conforme ai presenti Termini o per motivi di manutenzione o aggiornamento tecnico.</p>
+<p>4. Contenuti e dati disponibili sulla piattaforma</p>
+<p>I dati e le informazioni disponibili su dexxa provengono da fonti pubbliche e ufficiali, come Camere di Commercio e Catasto, o da elaborazioni basate su intelligenza artificiale.
+dexxa non garantisce che tutte le informazioni siano sempre aggiornate o prive di errori, pur adottando ogni ragionevole misura per assicurarne l’affidabilità.
+È vietato copiare, distribuire o riutilizzare i dati e i contenuti della piattaforma per finalità diverse da quelle consentite dall’abbonamento sottoscritto.</p>
+<p>5. Abbonamenti e pagamenti</p>
+<p>L’accesso ai servizi di dexxa può avvenire tramite abbonamenti a pagamento o formule promozionali specifiche. Il pagamento dell’abbonamento consente l’utilizzo del servizio per la durata prevista e alle condizioni indicate al momento dell’acquisto. dexxa si riserva il diritto di modificare in qualsiasi momento i piani, le tariffe o le funzionalità, previa comunicazione agli utenti interessati.</p>
+<p>6. Proprietà intellettuale</p>
+<p>Tutti i diritti relativi ai marchi, loghi, testi, design, codice sorgente, algoritmi e contenuti della piattaforma appartengono a dexxa. È vietato copiare, modificare, distribuire o sfruttare tali materiali senza autorizzazione scritta.</p>
+<p>7. Limitazione di responsabilità</p>
+<p>dexxa fornisce i propri servizi “così come sono”, senza garanzie esplicite o implicite.
+Non è responsabile per eventuali danni diretti o indiretti derivanti dall’uso o dall’impossibilità di utilizzare la piattaforma, né per decisioni o azioni prese dagli utenti sulla base dei dati forniti.</p>
+<p>8. Modifiche ai Termini</p>
+<p>dexxa può aggiornare o modificare i presenti Termini in qualsiasi momento. Le modifiche saranno comunicate mediante pubblicazione sul sito e avranno effetto immediato dalla data di pubblicazione. L’utilizzo continuato del servizio dopo la pubblicazione delle modifiche implica l’accettazione delle nuove condizioni.</p>
+<p>9. Legge applicabile e foro competente</p>
+<p>I presenti Termini sono disciplinati dalla legge svizzera.
+Per ogni controversia derivante dall’uso della piattaforma o dall’interpretazione dei presenti Termini sarà competente in via esclusiva il foro di Lugano (Svizzera).</p>
+<p>10. Contatti</p>
+<p>Per qualsiasi richiesta o segnalazione relativa ai presenti Termini, è possibile scrivere a:
+email: info@dexxa.ai</p>
+      <div class="policy-actions">
+        <a class="link-btn" href="#home">← Torna alla Home</a>
+      </div>
+    </article>
+  </div>
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="social-links">
+        <a href="mailto:info@dexxa.ai" class="social-link">Email</a>
+        <a href="#privacy" class="social-link">Privacy</a>
+        <a href="#termini" class="social-link">Termini</a>
+      </div>
+      <p class="footer-text">© 2025 dexxa - Il primo Co-pilota per lo Sviluppo Commerciale. Tutti i diritti riservati.</p>
+<p class="footer-text">La piattaforma di intelligenza artificiale che rivoluziona la ricerca clienti dei consulenti finanziari, con contatti qualificati, esclusività territoriale e automazione completa</p>
+    </div>
+  </footer>
+</main>
+
+<script>
+const GAS_ENDPOINT='https://script.google.com/macros/s/AKfycbzZvfHLpFsbOhiXTBTq0IfGbWv2J0dQnq17qpBwjmBj7_AO-yxlu-RqoGO9VRXLMYl1wQ/exec';
+const TOTAL_SPOTS=100;
+let subscriptions=0;
+const spotsLeftEl=document.getElementById('spotsLeft');
+const subsCountEl=document.getElementById('subsCount');
+const progressFillEl=document.getElementById('progressFill');
+const oversubNoteEl=document.getElementById('oversubNote');
+function renderProgress(){
+  const used=Math.max(0,Math.min(subscriptions,TOTAL_SPOTS));
+  const left=Math.max(0,TOTAL_SPOTS-used);
+  if(subsCountEl) subsCountEl.textContent=String(used);
+  if(spotsLeftEl) spotsLeftEl.textContent=String(left);
+  const percent=Math.min(100,(used/TOTAL_SPOTS)*100);
+  if(progressFillEl) progressFillEl.style.width=percent+'%';
+  if(oversubNoteEl) oversubNoteEl.classList.toggle('show',used>=TOTAL_SPOTS);
+}
+async function syncCountFromServer(){
+  try{
+    const res=await fetch(GAS_ENDPOINT+'?t='+Date.now(),{method:'GET',mode:'cors',cache:'no-store'});
+    const json=await res.json();
+    if(json&&json.ok&&Number.isFinite(json.total)){
+      subscriptions=json.total;
+      try{localStorage.setItem('dexxa_total',String(json.total));}catch(_){}
+      renderProgress();
+    }
+  }catch(err){console.warn('Sync error:',err);}
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  try{const cached=Number(localStorage.getItem('dexxa_total')); if(Number.isFinite(cached)){subscriptions=cached; renderProgress();}}catch(_){}
+  syncCountFromServer(); setInterval(syncCountFromServer,30000);
+});
+document.getElementById('waitlistForm')?.addEventListener('submit',async(e)=>{
+  e.preventDefault();
+  const form=e.target;
+  const submitBtn=document.getElementById('submitBtn');
+  const spinner=document.getElementById('spinner');
+  const successMsg=document.getElementById('successMessage');
+  const email=(form.email.value||'').toLowerCase().trim();
+  const domain=email.split('@')[1];
+  const freeDomains=['gmail.com','outlook.com','hotmail.com','yahoo.com','icloud.com','live.com','aol.com'];
+  if(domain && freeDomains.includes(domain)){
+    alert('dexxa.ai dice: Per iscriversi è necessario utilizzare una email professionale (es. nome@azienda.com).');
+    return;
+  }
+  if(submitBtn){submitBtn.disabled=true; submitBtn.textContent='Registrazione in corso...';}
+  if(spinner) spinner.classList.add('show');
+  const payload={
+    timestamp:new Date().toISOString(),
+    name:form.name.value||'',
+    email,
+    company:form.company.value||'',
+    role:form.role.value||'',
+    province:form.province.value||'',
+    leads:form.leads.value||'',
+    privacy:form.privacy.checked?'yes':'no',
+    userAgent:navigator.userAgent,
+    referrer:document.referrer||''
+  };
+  try{
+    const res=await fetch(GAS_ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload),mode:'cors'});
+    const json=await res.json();
+    if(json && json.ok){
+      subscriptions+=1; renderProgress();
+      try{localStorage.setItem('dexxa_total',String(subscriptions));}catch(_){}
+      if(successMsg){
+        successMsg.classList.add('show');
+        const navOffset=80;
+        requestAnimationFrame(()=>{requestAnimationFrame(()=>{
+          const rect=successMsg.getBoundingClientRect();
+          const targetY=Math.max(0,rect.top+window.pageYOffset-Math.max(0,(window.innerHeight-rect.height)/2)-navOffset);
+          window.scrollTo({top:targetY,behavior:'smooth'});
+          try{successMsg.setAttribute('tabindex','-1'); successMsg.focus({preventScroll:true});}catch(_){}
+        });});
+      }
+      form.reset();
+      setTimeout(()=>{if(successMsg) successMsg.classList.remove('show');},5000);
+      setTimeout(syncCountFromServer,1000);
+    }else{
+      alert('Errore: '+(json?.error||'Riprova più tardi.'));
+    }
+  }catch(err){
+    alert('Errore di rete: '+(err?.message||err));
+  }finally{
+    if(spinner) spinner.classList.remove('show');
+    if(submitBtn){submitBtn.disabled=false; submitBtn.textContent='Blocca il tuo Accesso Prioritario';}
+  }
+});
+(function(){
+  const routes={
+    home: document.getElementById('route-home') || document.body,
+    privacy: document.getElementById('route-privacy'),
+    termini: document.getElementById('route-termini')
+  };
+  function renderRoute(){
+    var hash=(location.hash||'#home').replace('#','').toLowerCase();
+    var target=(hash==='privacy'?'privacy':(hash==='termini'?'termini':'home'));
+    Object.keys(routes).forEach(function(k){
+      if(!routes[k]) return;
+      if(k===target){ routes[k].removeAttribute('hidden'); }
+      else{ routes[k].setAttribute('hidden',''); }
+    });
+    window.scrollTo({top:0,behavior:'instant'});
+  }
+  window.addEventListener('hashchange',renderRoute);
+  document.addEventListener('DOMContentLoaded',renderRoute);
+})();
+</script>
+
+<script>
+// Accessible FAQ toggle
+(function(){
+  function initFAQ(){
+    var items = document.querySelectorAll('.faq-item');
+    items.forEach(function(item){
+      if(item.dataset.enhanced === '1') return;
+      item.dataset.enhanced = '1';
+      item.setAttribute('role','button');
+      item.setAttribute('tabindex','0');
+      var answer = item.querySelector('.faq-answer');
+      var icon = item.querySelector('.faq-icon');
+      function toggle(){
+        item.classList.toggle('active');
+        if(answer){
+          var isOpen = item.classList.contains('active');
+          answer.style.display = isOpen ? 'block' : 'none';
+          item.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        }
+      }
+      item.addEventListener('click', function(e){
+        if(e.target.closest('a,button,input,select,textarea,label')) return;
+        toggle();
+      });
+      item.addEventListener('keydown', function(e){
+        if(e.key === 'Enter' || e.key === ' '){
+          e.preventDefault();
+          toggle();
+        }
+      });
+      // ensure initial state
+      if(answer) { answer.style.display = item.classList.contains('active') ? 'block' : 'none'; }
+    });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initFAQ);
+  else initFAQ();
+})();
+</script>
+
+
+<script>
+// === Custom validation messages (Italian) ===
+(function(){
+  function setEmailMessages(){
+    var email = document.getElementById('email');
+    if(!email) return;
+    // When the field is invalid, set our Italian message
+    email.addEventListener('invalid', function(){
+      // Use a single clear message for missing @ or general type mismatch
+      if (email.validity.typeMismatch || email.validity.valueMissing) {
+        email.setCustomValidity("Inserisci un simbolo ‘@’ nell’indirizzo email. L’email non contiene il simbolo ‘@’");
+      } else {
+        email.setCustomValidity("");
+      }
+    });
+    // Clear message while typing
+    email.addEventListener('input', function(){ email.setCustomValidity(""); });
+  }
+
+  function setPrivacyMessages(){
+    var privacy = document.getElementById('privacy');
+    if(!privacy) return;
+    privacy.addEventListener('invalid', function(){
+      privacy.setCustomValidity("Seleziona questa casella per procedere");
+    });
+    privacy.addEventListener('change', function(){
+      privacy.setCustomValidity("");
+    });
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', function(){
+      setEmailMessages();
+      setPrivacyMessages();
+    });
+  } else {
+    setEmailMessages();
+    setPrivacyMessages();
+  }
+})();
+</script>
+</body>
+</html>
